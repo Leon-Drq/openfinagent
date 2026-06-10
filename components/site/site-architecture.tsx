@@ -1,17 +1,3 @@
-import {
-  Activity,
-  ArrowDown,
-  CheckCircle2,
-  Cpu,
-  Database,
-  FileSearch,
-  GitBranch,
-  Layers3,
-  MousePointer2,
-  Network,
-  PlugZap,
-  Search,
-} from "lucide-react"
 import { SectionHeading } from "./site-why"
 
 const layers = [
@@ -20,28 +6,24 @@ const layers = [
     code: "Web UI · Notebook · CLI",
     desc: "Where humans or upstream agents issue intent.",
     contract: "Intent",
-    icon: MousePointer2,
   },
   {
     label: "Orchestrator",
     code: "Analyst · Quant · Risk · Macro",
     desc: "Multi-agent role assignment, planning, and debate.",
     contract: "Plan",
-    icon: Network,
   },
   {
     label: "Core Runtime",
     code: "Skill Registry · Workflow DSL · Memory",
     desc: "Skill resolution, workflow execution, shared context.",
     contract: "Trace",
-    icon: Cpu,
   },
   {
     label: "QVeris Adapter",
     code: "MCP · Python SDK · REST",
     desc: "Discover, inspect, then call any QVeris capability.",
     contract: "Capability",
-    icon: PlugZap,
     accent: true,
   },
   {
@@ -49,7 +31,6 @@ const layers = [
     code: "DuckDB Cache · Audit Log · Cost Guard",
     desc: "Caching, observability, and budget enforcement.",
     contract: "Evidence",
-    icon: Database,
   },
 ]
 
@@ -58,19 +39,16 @@ const cycle = [
     step: "Discover",
     title: "Find the right capability",
     body: "Semantic search ranks tools by coverage, freshness, provenance, and estimated cost.",
-    icon: Search,
   },
   {
     step: "Inspect",
     title: "Read the contract",
     body: "Schemas, sample payloads, limits, and permission scope are checked before execution.",
-    icon: FileSearch,
   },
   {
     step: "Call",
     title: "Execute, cache, audit",
     body: "Calls run through MCP, write to DuckDB, and leave a replayable audit trail.",
-    icon: CheckCircle2,
   },
 ]
 
@@ -139,7 +117,9 @@ export function SiteArchitecture() {
                       Discover → Inspect → Call
                     </h3>
                   </div>
-                  <Activity className="h-5 w-5 text-primary" aria-hidden />
+                  <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-primary">
+                    Live path
+                  </span>
                 </div>
               </div>
 
@@ -160,7 +140,7 @@ export function SiteArchitecture() {
                   </p>
                   <p className="mt-1 text-sm">Research intent</p>
                 </div>
-                <ArrowDown className="h-4 w-4 rotate-[-90deg] text-muted-foreground" />
+                <span className="font-mono text-sm text-muted-foreground">→</span>
                 <div className="text-right">
                   <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
                     Output
@@ -183,8 +163,6 @@ function LayerRow({
   layer: (typeof layers)[number]
   index: number
 }) {
-  const Icon = layer.icon
-
   return (
     <li
       className={`relative grid grid-cols-[3rem_1fr] gap-4 rounded-lg border p-4 md:grid-cols-[3.5rem_1fr_auto] md:items-center md:p-5 ${
@@ -195,15 +173,12 @@ function LayerRow({
     >
       <div>
         <span
-          className={`relative z-10 grid h-12 w-12 place-items-center rounded-lg border ${
+          className={`relative z-10 grid h-12 w-12 place-items-center rounded-lg border font-mono text-sm ${
             layer.accent
               ? "border-primary/40 bg-primary text-primary-foreground"
               : "border-border bg-secondary text-muted-foreground"
           }`}
         >
-          <Icon className="h-5 w-5" aria-hidden />
-        </span>
-        <span className="font-mono text-[11px] text-muted-foreground md:mt-2 md:block">
           {String(index + 1).padStart(2, "0")}
         </span>
       </div>
@@ -213,7 +188,6 @@ function LayerRow({
           <h3 className="font-serif text-xl leading-tight">{layer.label}</h3>
           {layer.accent && (
             <span className="inline-flex items-center gap-1 rounded-full border border-primary/25 bg-background px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-primary">
-              <Layers3 className="h-3 w-3" aria-hidden />
               bridge
             </span>
           )}
@@ -228,7 +202,6 @@ function LayerRow({
           {layer.code}
         </span>
         <span className="inline-flex items-center gap-1 rounded-full border border-border bg-secondary px-3 py-1 font-mono text-[11px] text-foreground">
-          <GitBranch className="h-3 w-3 text-primary" aria-hidden />
           {layer.contract}
         </span>
       </div>
@@ -243,12 +216,10 @@ function CycleStep({
   item: (typeof cycle)[number]
   index: number
 }) {
-  const Icon = item.icon
-
   return (
     <li className="relative grid grid-cols-[2.5rem_1fr] gap-4 pb-6 last:pb-0">
-      <span className="relative z-10 grid h-10 w-10 place-items-center rounded-lg border border-border bg-background text-primary">
-        <Icon className="h-4 w-4" aria-hidden />
+      <span className="relative z-10 grid h-10 w-10 place-items-center rounded-lg border border-border bg-background font-mono text-[11px] text-primary">
+        0{index + 1}
       </span>
       <div>
         <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
