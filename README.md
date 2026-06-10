@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="./public/finagent-banner.jpg" alt="OpenFinAgent" width="100%" />
+<img src="./public/platform.svg" alt="OpenFinAgent platform diagram" width="100%" />
 
 # OpenFinAgent
 
