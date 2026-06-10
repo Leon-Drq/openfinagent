@@ -1,0 +1,95 @@
+name: Bug report
+description: Something is broken or behaving unexpectedly.
+title: "bug: <one-line summary>"
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to file a bug report. The more reproducible
+        the report, the faster we can fix it.
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: A clear and concise description of the bug.
+      placeholder: e.g. `finagent run earnings-deep-dive` exits with KeyError on the filings step.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction steps
+      description: |
+        Minimal steps to reproduce. If you can attach a workflow YAML or
+        config snippet, please do — but **redact any real API keys**.
+      placeholder: |
+        1. `pip install -e .`
+        2. Set `OPENAI_API_KEY=...`
+        3. `finagent run earnings-deep-dive --input ticker=NVDA`
+        4. Observe the traceback below.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What did you expect to happen instead?
+    validations:
+      required: false
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs / traceback
+      description: Paste the full error and any relevant `audit.jsonl` lines.
+      render: shell
+    validations:
+      required: false
+
+  - type: input
+    id: version
+    attributes:
+      label: finagent version
+      description: Output of `finagent version` (or git SHA if running from source).
+      placeholder: 0.1.0
+    validations:
+      required: true
+
+  - type: dropdown
+    id: python
+    attributes:
+      label: Python version
+      options:
+        - "3.10"
+        - "3.11"
+        - "3.12"
+        - other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: provider
+    attributes:
+      label: Provider involved
+      multiple: true
+      options:
+        - yfinance
+        - sec_edgar
+        - fred
+        - qveris
+        - custom / BYO
+        - none / runtime
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      options:
+        - label: I agree to follow the project's [Code of Conduct](../../CODE_OF_CONDUCT.md).
+          required: true

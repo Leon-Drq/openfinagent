@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 820" role="img"
+     aria-label="Platform diagram: capability universe, orchestration core, agents, skills, and surfaces">
+  <defs>
+    <style><![CDATA[
+      :root {
+        --bg: #fbfaf6;
+        --card: #ffffff;
+        --fg: #1a1f1c;
+        --muted: #6b6f6b;
+        --primary: #1f6f4a;
+        --primary-fg: #fbfaf6;
+        --accent: #c8842a;
+        --border: #e3e0d6;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #0e1311;
+          --card: #131a17;
+          --fg: #e9eae6;
+          --muted: #8b8f8b;
+          --primary: #4ec48c;
+          --primary-fg: #0a0f0d;
+          --accent: #ecb66a;
+          --border: #232b27;
+        }
+      }
+      .bg          { fill: var(--card); }
+      .lbl-tier    { font: 600 11px ui-monospace, "SF Mono", Menlo, monospace; letter-spacing: .12em; text-transform: uppercase; fill: var(--muted); }
+      .lbl-chip    { font: 600 13px Inter, system-ui, sans-serif; fill: var(--fg); }
+      .lbl-note    { font: 500 10px ui-monospace, monospace; fill: var(--muted); letter-spacing: .04em; }
+      .lbl-core    { font: 700 14px Inter, system-ui, sans-serif; fill: var(--primary-fg); letter-spacing: .04em; text-transform: uppercase; }
+      .lbl-stage   { font: 600 15px Inter, system-ui, sans-serif; fill: var(--primary-fg); }
+      .lbl-stage-n { font: 400 11px ui-monospace, monospace; fill: var(--primary-fg); fill-opacity: .7; }
+      .lbl-pop-t   { font: 700 11px ui-monospace, monospace; letter-spacing: .14em; text-transform: uppercase; fill: var(--accent); }
+      .lbl-pop     { font: 500 11px Inter, system-ui, sans-serif; fill: var(--fg); }
+      .lbl-foot    { font: 400 10px ui-monospace, monospace; letter-spacing: .18em; fill: var(--primary-fg); fill-opacity: .75; }
+
+      .chip        { fill: var(--card); stroke: var(--border); stroke-width: 1; }
+      .chip-amber  { fill: var(--card); stroke: var(--accent); stroke-width: 1; stroke-opacity: .55; }
+      .chip-emer   { fill: var(--card); stroke: var(--primary); stroke-width: 1; stroke-opacity: .45; }
+      .chip-amber-tint { fill: var(--accent); fill-opacity: .08; }
+      .chip-emer-tint  { fill: var(--primary); fill-opacity: .06; }
+
+      .flow {
+        stroke: var(--primary); stroke-opacity: .55;
+        stroke-width: 1.25; fill: none;
+        stroke-dasharray: 4 6;
+        animation: dash 1.6s linear infinite;
+      }
+      @keyframes dash { to { stroke-dashoffset: -20; } }
+
+      .core      { fill: var(--primary); }
+      .core-glow {
+        fill: none; stroke: var(--primary); stroke-width: 2; opacity: .35;
+        animation: glow 2.6s ease-in-out infinite;
+        transform-origin: 600px 435px;
+      }
+      @keyframes glow {
+        0%, 100% { opacity: .15; }
+        50%      { opacity: .55; }
+      }
+
+      .stage-row { cursor: pointer; }
+      .stage-hl {
+        fill: var(--accent); opacity: 0;
+        animation: stage-cycle 4.8s ease-in-out infinite;
+      }
+      .stage-1 { animation-delay: 0s; }
+      .stage-2 { animation-delay: 1.6s; }
+      .stage-3 { animation-delay: 3.2s; }
+      @keyframes stage-cycle {
+        0%, 25%   { opacity: 0; }
+        8%, 17%   { opacity: 1; }
+        33%, 100% { opacity: 0; }
+      }
+
+      .stage-pop { opacity: 0; pointer-events: none; transition: opacity .2s ease; }
+      .stage-row:hover .stage-pop { opacity: 1; }
+      .stage-row:hover .stage-hl  { opacity: 1; animation: none; }
+
+      .core-line { stroke: var(--primary-fg); stroke-opacity: .25; stroke-width: 1; }
+      .stage-conn { stroke: var(--primary-fg); stroke-opacity: .35; stroke-width: 1; stroke-dasharray: 2 3; }
+
+      .badge-bg     { fill: var(--primary-fg); fill-opacity: .12; stroke: var(--primary-fg); stroke-opacity: .35; stroke-width: 1; }
+      .badge-text   { font: 600 11px ui-monospace, monospace; fill: var(--primary-fg); }
+
+      .dot-amber { fill: var(--accent); }
+      .dot-emer  { fill: var(--primary); }
+
+      .pop-bg   { fill: var(--card); stroke: var(--accent); stroke-width: 1.25; }
+      .pop-conn { stroke: var(--accent); stroke-width: 1; stroke-opacity: .6; }
+    ]]></style>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--primary)" fill-opacity=".55"/>
+    </marker>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="1200" height="820"/>
+
+  <!-- ============== TOP TIER : Capability Universe ============== -->
+  <text class="lbl-tier" x="600" y="28" text-anchor="middle">Capability Universe — powered by QVeris . 10,000+ verified tools</text>
+
+  <!-- chips: x positions 30, 224, 418, 612, 806, 1000 ; y=56 ; w=170 ; h=56 -->
+  <g>
+    <rect class="chip-amber-tint" x="30"   y="56" width="170" height="56" rx="10"/>
+    <rect class="chip-amber"      x="30"   y="56" width="170" height="56" rx="10"/>
+    <text class="lbl-chip" x="46"  y="80">Market Data</text>
+    <text class="lbl-note" x="46"  y="98">OHLCV . L1/L2</text>
+    <circle class="dot-amber" cx="186" cy="70" r="3"/>
+  </g>
+  <g>
+    <rect class="chip-amber-tint" x="224"  y="56" width="170" height="56" rx="10"/>
+    <rect class="chip-amber"      x="224"  y="56" width="170" height="56" rx="10"/>
+    <text class="lbl-chip" x="240" y="80">Filings</text>
+    <text class="lbl-note" x="240" y="98">10-K . 10-Q . 8-K</text>
+    <circle class="dot-amber" cx="380" cy="70" r="3"/>
+  </g>
+  <g>
+    <rect class="chip-amber-tint" x="418"  y="56" width="170" height="56" rx="10"/>
+    <rect class="chip-amber"      x="418"  y="56" width="170" height="56" rx="10"/>
+    <text class="lbl-chip" x="434" y="80">News</text>
+    <text class="lbl-note" x="434" y="98">wires . sentiment</text>
+    <circle class="dot-amber" cx="574" cy="70" r="3"/>
+  </g>
+  <g>
+    <rect class="chip-amber-tint" x="612"  y="56" width="170" height="56" rx="10"/>
+    <rect class="chip-amber"      x="612"  y="56" width="170" height="56" rx="10"/>
+    <text class="lbl-chip" x="628" y="80">Macro</text>
+    <text class="lbl-note" x="628" y="98">FRED . BLS . IMF</text>
+    <circle class="dot-amber" cx="768" cy="70" r="3"/>
+  </g>
+  <g>
+    <rect class="chip-amber-tint" x="806"  y="56" width="170" height="56" rx="10"/>
+    <rect class="chip-amber"      x="806"  y="56" width="170" height="56" rx="10"/>
+    <text class="lbl-chip" x="822" y="80">Crypto</text>
+    <text class="lbl-note" x="822" y="98">spot . onchain</text>
+    <circle class="dot-amber" cx="962" cy="70" r="3"/>
+  </g>
+  <g>
+    <rect class="chip-amber-tint" x="1000" y="56" width="170" height="56" rx="10"/>
+    <rect class="chip-amber"      x="1000" y="56" width="170" height="56" rx="10"/>
+    <text class="lbl-chip" x="1016" y="80">Alt Data</text>
+    <text class="lbl-note" x="1016" y="98">ESG . satellite</text>
+    <circle class="dot-amber" cx="1156" cy="70" r="3"/>
+  </g>
+
+  <!-- vertical drops + horizontal bus + drop into core -->
+  <line class="flow" x1="115"  y1="112" x2="115"  y2="180"/>
+  <line class="flow" x1="309"  y1="112" x2="309"  y2="180"/>
+  <line class="flow" x1="503"  y1="112" x2="503"  y2="180"/>
+  <line class="flow" x1="697"  y1="112" x2="697"  y2="180"/>
+  <line class="flow" x1="891"  y1="112" x2="891"  y2="180"/>
+  <line class="flow" x1="1085" y1="112" x2="1085" y2="180"/>
+  <line class="flow" x1="115"  y1="180" x2="1085" y2="180"/>
+  <line class="flow" x1="600"  y1="180" x2="600"  y2="270" marker-end="url(#arrow)"/>
+
+  <!-- traveling dots on bus -->
+  <circle class="dot-amber" r="3.5">
+    <animateMotion dur="3.2s" repeatCount="indefinite" path="M 115 180 L 1085 180"/>
+  </circle>
+  <circle class="dot-amber" r="3.5">
+    <animateMotion dur="3.2s" begin="1.6s" repeatCount="indefinite" path="M 1085 180 L 115 180"/>
+  </circle>
+  <circle class="dot-emer" r="3.5">
+    <animateMotion dur="1.6s" repeatCount="indefinite" path="M 600 180 L 600 270"/>
+  </circle>
+
+  <!-- ============== MIDDLE : Agents (left), Skills (right), Core (center) ============== -->
+
+  <!-- AGENTS -->
+  <text class="lbl-tier" x="40" y="258">Agents</text>
+
+  <g>
+    <rect class="chip-emer-tint" x="40" y="280" width="240" height="56" rx="8"/>
+    <rect class="chip-emer"      x="40" y="280" width="240" height="56" rx="8"/>
+    <text class="lbl-chip" x="56" y="304">Analyst</text>
+    <text class="lbl-note" x="56" y="322">research &amp; narrative</text>
+    <circle class="dot-emer" cx="266" cy="308" r="3"/>
+    <line class="flow" x1="280" y1="308" x2="340" y2="308" marker-end="url(#arrow)"/>
+    <circle class="dot-emer" r="3">
+      <animateMotion dur="2.2s" repeatCount="indefinite" path="M 280 308 L 340 308"/>
+    </circle>
+  </g>
+  <g>
+    <rect class="chip-emer-tint" x="40" y="354" width="240" height="56" rx="8"/>
+    <rect class="chip-emer"      x="40" y="354" width="240" height="56" rx="8"/>
+    <text class="lbl-chip" x="56" y="378">Quant</text>
+    <text class="lbl-note" x="56" y="396">factors &amp; backtests</text>
+    <circle class="dot-emer" cx="266" cy="382" r="3"/>
+    <line class="flow" x1="280" y1="382" x2="340" y2="382" marker-end="url(#arrow)"/>
+    <circle class="dot-emer" r="3">
+      <animateMotion dur="2.4s" begin="0.4s" repeatCount="indefinite" path="M 280 382 L 340 382"/>
+    </circle>
+  </g>
+  <g>
+    <rect class="chip-emer-tint" x="40" y="428" width="240" height="56" rx="8"/>
+    <rect class="chip-emer"      x="40" y="428" width="240" height="56" rx="8"/>
+    <text class="lbl-chip" x="56" y="452">Risk Officer</text>
+    <text class="lbl-note" x="56" y="470">limits &amp; compliance</text>
+    <circle class="dot-emer" cx="266" cy="456" r="3"/>
+    <line class="flow" x1="280" y1="456" x2="340" y2="456" marker-end="url(#arrow)"/>
+    <circle class="dot-emer" r="3">
+      <animateMotion dur="2.6s" begin="0.8s" repeatCount="indefinite" path="M 280 456 L 340 456"/>
+    </circle>
+  </g>
+  <g>
+    <rect class="chip-emer-tint" x="40" y="502" width="240" height="56" rx="8"/>
+    <rect class="chip-emer"      x="40" y="502" width="240" height="56" rx="8"/>
+    <text class="lbl-chip" x="56" y="526">Macro Strategist</text>
+    <text class="lbl-note" x="56" y="544">regimes &amp; flows</text>
+    <circle class="dot-emer" cx="266" cy="530" r="3"/>
+    <line class="flow" x1="280" y1="530" x2="340" y2="530" marker-end="url(#arrow)"/>
+    <circle class="dot-emer" r="3">
+      <animateMotion dur="2.8s" begin="1.2s" repeatCount="indefinite" path="M 280 530 L 340 530"/>
+    </circle>
+  </g>
+
+  <!-- SKILLS -->
+  <text class="lbl-tier" x="920" y="258">Skills . Workflows</text>
+
+  <g>
+    <rect class="chip-amber-tint" x="920" y="280" width="240" height="56" rx="8"/>
+    <rect class="chip-amber"      x="920" y="280" width="240" height="56" rx="8"/>
+    <text class="lbl-chip" x="936" y="304">Factor Library</text>
+    <text class="lbl-note" x="936" y="322">momentum . value . quality</text>
+    <circle class="dot-amber" cx="1146" cy="308" r="3"/>
+    <line class="flow" x1="860" y1="308" x2="920" y2="308" marker-end="url(#arrow)"/>
+    <circle class="dot-amber" r="3">
+      <animateMotion dur="2.4s" begin="0.2s" repeatCount="indefinite" path="M 860 308 L 920 308"/>
+    </circle>
+  </g>
+  <g>
+    <rect class="chip-amber-tint" x="920" y="354" width="240" height="56" rx="8"/>
+    <rect class="chip-amber"      x="920" y="354" width="240" height="56" rx="8"/>
+    <text class="lbl-chip" x="936" y="378">Valuation Models</text>
+    <text class="lbl-note" x="936" y="396">DCF . comps . multiples</text>
+    <circle class="dot-amber" cx="1146" cy="382" r="3"/>
+    <line class="flow" x1="860" y1="382" x2="920" y2="382" marker-end="url(#arrow)"/>
+    <circle class="dot-amber" r="3">
+      <animateMotion dur="2.6s" begin="0.6s" repeatCount="indefinite" path="M 860 382 L 920 382"/>
+    </circle>
+  </g>
+  <g>
+    <rect class="chip-amber-tint" x="920" y="428" width="240" height="56" rx="8"/>
+    <rect class="chip-amber"      x="920" y="428" width="240" height="56" rx="8"/>
+    <text class="lbl-chip" x="936" y="452">Company Deep-Dive</text>
+    <text class="lbl-note" x="936" y="470">earnings . 13F . ownership</text>
+    <circle class="dot-amber" cx="1146" cy="456" r="3"/>
+    <line class="flow" x1="860" y1="456" x2="920" y2="456" marker-end="url(#arrow)"/>
+    <circle class="dot-amber" r="3">
+      <animateMotion dur="2.8s" begin="1.0s" repeatCount="indefinite" path="M 860 456 L 920 456"/>
+    </circle>
+  </g>
+  <g>
+    <rect class="chip-amber-tint" x="920" y="502" width="240" height="56" rx="8"/>
+    <rect class="chip-amber"      x="920" y="502" width="240" height="56" rx="8"/>
+    <text class="lbl-chip" x="936" y="526">Workflow DSL</text>
+    <text class="lbl-note" x="936" y="544">YAML . replayable</text>
+    <circle class="dot-amber" cx="1146" cy="530" r="3"/>
+    <line class="flow" x1="860" y1="530" x2="920" y2="530" marker-end="url(#arrow)"/>
+    <circle class="dot-amber" r="3">
+      <animateMotion dur="3.0s" begin="1.4s" repeatCount="indefinite" path="M 860 530 L 920 530"/>
+    </circle>
+  </g>
+
+  <!-- CORE -->
+  <rect class="core-glow" x="334" y="264" width="532" height="342" rx="18"/>
+  <rect class="core"      x="340" y="270" width="520" height="330" rx="14"/>
+  <text class="lbl-core"  x="600" y="300" text-anchor="middle">Studio Core . Orchestration Engine</text>
+  <line class="core-line" x1="364" y1="316" x2="836" y2="316"/>
+
+  <!-- Stage 01 : DISCOVER -->
+  <g class="stage-row">
+    <rect x="356" y="328" width="488" height="64" fill="transparent"/>
+    <rect class="stage-hl stage-1" x="362" y="332" width="4" height="56" rx="2"/>
+    <circle class="badge-bg" cx="390" cy="358" r="14"/>
+    <text class="badge-text" x="390" y="362" text-anchor="middle">01</text>
+    <text class="lbl-stage"   x="418" y="356">DISCOVER</text>
+    <text class="lbl-stage-n" x="418" y="376">find capabilities . semantic match</text>
+    <line class="stage-conn" x1="390" y1="374" x2="390" y2="410"/>
+
+    <g class="stage-pop">
+      <line class="pop-conn" x1="620" y1="358" x2="626" y2="358"/>
+      <rect class="pop-bg" x="626" y="322" width="218" height="88" rx="8"/>
+      <text class="lbl-pop-t" x="640" y="340">DISCOVER DETAILS</text>
+      <text class="lbl-pop"   x="640" y="358">. Semantic search across 10,000+ tools</text>
+      <text class="lbl-pop"   x="640" y="374">. Auto-rank by recency, coverage, cost</text>
+      <text class="lbl-pop"   x="640" y="390">. No hard-coded API list to maintain</text>
+    </g>
+  </g>
+
+  <!-- Stage 02 : INSPECT -->
+  <g class="stage-row">
+    <rect x="356" y="406" width="488" height="64" fill="transparent"/>
+    <rect class="stage-hl stage-2" x="362" y="410" width="4" height="56" rx="2"/>
+    <circle class="badge-bg" cx="390" cy="436" r="14"/>
+    <text class="badge-text" x="390" y="440" text-anchor="middle">02</text>
+    <text class="lbl-stage"   x="418" y="434">INSPECT</text>
+    <text class="lbl-stage-n" x="418" y="454">validate cost . permissions . schema</text>
+    <line class="stage-conn" x1="390" y1="452" x2="390" y2="488"/>
+
+    <g class="stage-pop">
+      <line class="pop-conn" x1="620" y1="436" x2="626" y2="436"/>
+      <rect class="pop-bg" x="626" y="400" width="218" height="88" rx="8"/>
+      <text class="lbl-pop-t" x="640" y="418">INSPECT DETAILS</text>
+      <text class="lbl-pop"   x="640" y="436">. Pre-flight cost &amp; rate-limit check</text>
+      <text class="lbl-pop"   x="640" y="452">. Type-safe schema for inputs/outputs</text>
+      <text class="lbl-pop"   x="640" y="468">. Permission scope before any call</text>
+    </g>
+  </g>
+
+  <!-- Stage 03 : CALL -->
+  <g class="stage-row">
+    <rect x="356" y="484" width="488" height="64" fill="transparent"/>
+    <rect class="stage-hl stage-3" x="362" y="488" width="4" height="56" rx="2"/>
+    <circle class="badge-bg" cx="390" cy="514" r="14"/>
+    <text class="badge-text" x="390" y="518" text-anchor="middle">03</text>
+    <text class="lbl-stage"   x="418" y="512">CALL</text>
+    <text class="lbl-stage-n" x="418" y="532">execute . cache . trace . audit</text>
+
+    <g class="stage-pop">
+      <line class="pop-conn" x1="620" y1="514" x2="626" y2="514"/>
+      <rect class="pop-bg" x="626" y="478" width="218" height="88" rx="8"/>
+      <text class="lbl-pop-t" x="640" y="496">CALL DETAILS</text>
+      <text class="lbl-pop"   x="640" y="514">. Local cache to avoid redundant credits</text>
+      <text class="lbl-pop"   x="640" y="530">. OpenTelemetry trace for every call</text>
+      <text class="lbl-pop"   x="640" y="546">. Replayable from the audit log</text>
+    </g>
+  </g>
+
+  <line class="core-line" x1="364" y1="556" x2="836" y2="556"/>
+  <text class="lbl-foot"  x="600" y="578" text-anchor="middle">CACHE . AUDIT LOG . COST GUARD . OBSERVABILITY</text>
+
+  <!-- ============== BOTTOM TIER : Surfaces ============== -->
+  <line class="flow" x1="600" y1="600" x2="600" y2="698" marker-end="url(#arrow)"/>
+  <line class="flow" x1="168" y1="698" x2="1032" y2="698"/>
+
+  <line class="flow" x1="168"  y1="698" x2="168"  y2="728"/>
+  <line class="flow" x1="384"  y1="698" x2="384"  y2="728"/>
+  <line class="flow" x1="600"  y1="698" x2="600"  y2="728"/>
+  <line class="flow" x1="816"  y1="698" x2="816"  y2="728"/>
+  <line class="flow" x1="1032" y1="698" x2="1032" y2="728"/>
+
+  <text class="lbl-tier" x="600" y="686" text-anchor="middle">Surfaces — choose any front-end</text>
+
+  <g>
+    <rect class="chip" x="68"  y="728" width="200" height="54" rx="10"/>
+    <text class="lbl-chip" x="84"  y="750">Web UI</text>
+    <text class="lbl-note" x="84"  y="768">Next.js</text>
+    <circle class="dot-emer" cx="254" cy="742" r="3"/>
+  </g>
+  <g>
+    <rect class="chip" x="284" y="728" width="200" height="54" rx="10"/>
+    <text class="lbl-chip" x="300" y="750">Notebook</text>
+    <text class="lbl-note" x="300" y="768">Jupyter . Marimo</text>
+    <circle class="dot-emer" cx="470" cy="742" r="3"/>
+  </g>
+  <g>
+    <rect class="chip" x="500" y="728" width="200" height="54" rx="10"/>
+    <text class="lbl-chip" x="516" y="750">CLI</text>
+    <text class="lbl-note" x="516" y="768">qfin run</text>
+    <circle class="dot-emer" cx="686" cy="742" r="3"/>
+  </g>
+  <g>
+    <rect class="chip" x="716" y="728" width="200" height="54" rx="10"/>
+    <text class="lbl-chip" x="732" y="750">MCP Server</text>
+    <text class="lbl-note" x="732" y="768">stdio . http</text>
+    <circle class="dot-emer" cx="902" cy="742" r="3"/>
+  </g>
+  <g>
+    <rect class="chip" x="932" y="728" width="200" height="54" rx="10"/>
+    <text class="lbl-chip" x="948" y="750">REST API</text>
+    <text class="lbl-note" x="948" y="768">OpenAPI</text>
+    <circle class="dot-emer" cx="1118" cy="742" r="3"/>
+  </g>
+
+  <circle class="dot-emer" r="3.5">
+    <animateMotion dur="3.6s" repeatCount="indefinite" path="M 600 600 L 600 698 L 168 698"/>
+  </circle>
+  <circle class="dot-emer" r="3.5">
+    <animateMotion dur="3.6s" begin="1.2s" repeatCount="indefinite" path="M 600 600 L 600 698 L 1032 698"/>
+  </circle>
+  <circle class="dot-emer" r="3.5">
+    <animateMotion dur="3.6s" begin="2.4s" repeatCount="indefinite" path="M 600 600 L 600 698 L 600 698"/>
+  </circle>
+</svg>

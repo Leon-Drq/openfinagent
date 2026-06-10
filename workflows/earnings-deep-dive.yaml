@@ -1,0 +1,92 @@
+# earnings-deep-dive
+# ------------------
+# A four-step workflow that uses three free providers (yfinance, sec_edgar)
+# plus one LLM step to produce an investment memo. No paid keys required —
+# only OPENAI_API_KEY (or OPENAI_BASE_URL pointing at any OpenAI-compatible
+# endpoint).
+
+name: earnings-deep-dive
+description: >
+  Pull a quote, company profile, and recent SEC filings for a US-listed
+  ticker, then ask an analyst LLM to write a tight earnings memo.
+
+inputs:
+  ticker:
+    type: string
+    required: true
+    description: Ticker symbol, e.g. NVDA, AAPL, MSFT.
+  filings_limit:
+    type: integer
+    default: 5
+
+steps:
+  # ----- Data fetch ------------------------------------------------------
+  - id: profile
+    type: fetch
+    capability: equity.profile
+    params:
+      ticker: ${ticker}
+
+  - id: quote
+    type: fetch
+    capability: equity.quote
+    params:
+      ticker: ${ticker}
+
+  - id: filings
+    type: fetch
+    capability: filings.recent
+    params:
+      ticker: ${ticker}
+      forms: ["10-K", "10-Q", "8-K"]
+      limit: ${filings_limit}
+
+  # ----- Analyst synthesis ----------------------------------------------
+  - id: thesis
+    type: agent
+    role: analyst
+    output: thesis_md
+    max_tokens: 1200
+    prompt: |
+      Write a concise investment memo for ${ticker} suitable for an
+      institutional reader who is short on time.
+
+      ## Company snapshot
+      ${profile}
+
+      ## Latest quote
+      ${quote}
+
+      ## Recent SEC filings (links and forms)
+      ${filings}
+
+      Structure your memo as:
+      1. **One-line thesis** (bullish / bearish / neutral, with a number-backed reason).
+      2. **What changed recently** — point to specific filings or news from the data above.
+      3. **Three bull-case drivers** — each with a concrete metric or filing reference.
+      4. **Three bear-case risks** — each with a concrete metric or filing reference.
+      5. **Open questions** — what would you ask management on the next earnings call?
+
+      Cite filing forms (10-K / 10-Q / 8-K) and dates when you reference them.
+      Do not invent numbers that are not in the data above.
+
+  # ----- Write to disk ---------------------------------------------------
+  - id: report
+    type: report
+    path: reports/${ticker}-${run_date}.md
+    template: |
+      # ${ticker} — Earnings Deep Dive
+      _Generated ${run_date} · run ${run_id}_
+
+      ## Snapshot
+      - **Name:** ${profile.name}
+      - **Sector / industry:** ${profile.sector} / ${profile.industry}
+      - **Last price:** ${quote.price} ${quote.currency}
+      - **Market cap:** ${quote.market_cap}
+
+      ## Thesis
+      ${thesis_md}
+
+      ---
+      _Sources: yfinance (quote, profile), SEC EDGAR (filings).
+      This is research, not investment advice._

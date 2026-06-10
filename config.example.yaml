@@ -1,0 +1,41 @@
+# openfinagent — example config
+# Copy to `config.yaml` and edit. The CLI auto-detects this file from CWD.
+
+routing:
+  # prefer_free | prefer_quality | explicit
+  policy: prefer_free
+
+budget:
+  # Hard cap across all providers, per workflow run.
+  usd_per_run: 5.00
+
+providers:
+  # ---- Tier 1: free, keyless ---------------------------------------------
+  - name: yfinance
+    type: builtin.yfinance
+    priority: 1
+
+  - name: sec_edgar
+    type: builtin.sec_edgar
+    priority: 1
+
+  # ---- Tier 1: free, requires a free key ---------------------------------
+  # Uncomment after grabbing a key at fred.stlouisfed.org
+  # - name: fred
+  #   type: builtin.fred
+  #   priority: 1
+  #   api_key: ${FRED_API_KEY}
+
+  # ---- Tier 2: QVeris (recommended for production) -----------------------
+  # - name: qveris
+  #   type: builtin.qveris
+  #   priority: 2
+  #   api_key: ${QVERIS_API_KEY}
+  #   budget_usd_per_run: 5.00
+
+  # ---- Tier 3: bring your own --------------------------------------------
+  # - name: my_bloomberg
+  #   type: my_company.providers:BloombergProxy
+  #   priority: 0
+  #   options:
+  #     terminal_host: localhost

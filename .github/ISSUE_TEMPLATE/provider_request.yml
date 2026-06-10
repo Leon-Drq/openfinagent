@@ -1,0 +1,60 @@
+name: New data provider
+description: Request (or propose) support for a new data provider.
+title: "provider: <vendor name>"
+labels: ["provider", "enhancement"]
+body:
+  - type: input
+    id: vendor
+    attributes:
+      label: Vendor / source
+      description: Name of the data source and a link to its API docs.
+      placeholder: e.g. Polygon.io — https://polygon.io/docs
+    validations:
+      required: true
+
+  - type: dropdown
+    id: tier
+    attributes:
+      label: Which tier does this fit?
+      options:
+        - Tier 1 — Free / public (no key, or free key)
+        - Tier 1 — Free tier of a paid vendor
+        - Tier 2 — Paid, broad coverage
+        - Tier 3 — Bring-your-own / private
+    validations:
+      required: true
+
+  - type: textarea
+    id: capabilities
+    attributes:
+      label: Capabilities you want exposed
+      description: List the capability ids you want this provider to serve. We use a dotted, namespaced convention (`<asset>.<endpoint>.<granularity>`).
+      placeholder: |
+        - equity.quote
+        - equity.history.daily
+        - filings.recent
+    validations:
+      required: true
+
+  - type: textarea
+    id: auth
+    attributes:
+      label: Auth / rate limits
+      description: Does it need an API key? What are the rate limits / cost per call?
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: contribute
+    attributes:
+      label: Are you willing to implement this?
+      options:
+        - label: Yes — I'll send a PR adding `finagent/providers/builtin/<vendor>.py` following the [yfinance reference](../../finagent/providers/builtin/yfinance_provider.py).
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      options:
+        - label: I agree to follow the project's [Code of Conduct](../../CODE_OF_CONDUCT.md).
+          required: true
