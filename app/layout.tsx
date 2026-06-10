@@ -23,13 +23,12 @@ const instrumentSerif = Instrument_Serif({
 })
 
 export const metadata: Metadata = {
-  title: "OpenFinAgent · Open-source financial agents on top of QVeris",
+  title: "OpenFinAgent · Open-source financial agent workflows",
   description:
-    "The open-source financial agent workspace. Compose investment research, due-diligence, and quant workflows with multi-agent teams that can call thousands of verified financial capabilities.",
-  generator: "v0.app",
+    "The open-source financial agent workspace. Run traced research workflows across sample data, free public providers, QVeris, and private feeds.",
   openGraph: {
     title: "OpenFinAgent",
-    description: "Open-source financial agents on top of QVeris.",
+    description: "Open-source financial agent workflows with pluggable data providers.",
     type: "website",
   },
 }

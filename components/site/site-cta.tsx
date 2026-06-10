@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { ArrowUpRight, Github, MessageSquare } from "lucide-react"
+import { ArrowUpRight, Github, Terminal } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 export function SiteCTA() {
@@ -17,18 +17,16 @@ export function SiteCTA() {
               <span className="italic text-primary">open</span> agent stack.
             </h2>
             <p className="mt-5 max-w-xl leading-relaxed text-muted-foreground">
-              Star the repo, ship a Skill, or join the contributors channel on
-              Discord. The first 100 contributors get a permanent shout-out in
-              the project credits.
+              Run the offline demo, inspect the audit log, then open an issue
+              with the provider or workflow you want next.
             </p>
           </div>
 
           <div className="flex flex-wrap gap-3">
             <Button asChild size="lg" className="h-11 gap-2 px-5">
-              <Link href="https://github.com/Leon-Drq/openfinagent" target="_blank" rel="noreferrer">
-                <Github className="h-4 w-4" aria-hidden />
-                Star on GitHub
-                <ArrowUpRight className="h-3.5 w-3.5" aria-hidden />
+              <Link href="#quickstart">
+                <Terminal className="h-4 w-4" aria-hidden />
+                Run the demo
               </Link>
             </Button>
             <Button
@@ -37,9 +35,10 @@ export function SiteCTA() {
               variant="outline"
               className="h-11 gap-2 px-5"
             >
-              <Link href="https://discord.gg" target="_blank" rel="noreferrer">
-                <MessageSquare className="h-4 w-4" aria-hidden />
-                Join Discord
+              <Link href="https://github.com/Leon-Drq/openfinagent/issues" target="_blank" rel="noreferrer">
+                <Github className="h-4 w-4" aria-hidden />
+                Open an issue
+                <ArrowUpRight className="h-3.5 w-3.5" aria-hidden />
               </Link>
             </Button>
           </div>

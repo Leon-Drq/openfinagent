@@ -6,7 +6,7 @@
 
 **Open-source financial agents — bring your own data, or plug into [QVeris](https://qveris.ai) for instant coverage.**
 
-Compose investment research, due-diligence, and quant workflows with multi-agent teams that route across free public data, your internal feeds, and QVeris's 10,000+ verified capabilities — all behind one SDK, CLI, and Web UI.
+Compose investment research, due-diligence, and quant workflows with multi-agent teams that route across free public data, your internal feeds, and QVeris's 10,000+ verified capabilities — all behind one SDK, CLI, MCP surface, and upcoming Web UI.
 
 [简体中文](./README.zh-CN.md) · [Quickstart](#quickstart) · [Data Providers](./docs/providers/overview.md) · [Roadmap](#roadmap) · [Changelog](./CHANGELOG.md)
 
@@ -46,7 +46,7 @@ Compose investment research, due-diligence, and quant workflows with multi-agent
 
 ## What it looks like
 
-One command. Free public data. A finished memo. **No paid keys required** beyond an OpenAI key for the LLM step.
+One command. Free public data. A finished memo. **No paid data keys required** beyond an OpenAI-compatible key for the live LLM step. If you want to verify the runtime first, `finagent demo NVDA` runs fully offline with deterministic sample data.
 
 ```console
 $ finagent run earnings-deep-dive --input ticker=NVDA
@@ -93,7 +93,40 @@ pip install -e .
 # pip install openfinagent
 ```
 
-### 2. Set your OpenAI key
+### 2. Run the offline demo
+
+This path needs no network, no OpenAI key, and no data vendor key. It proves the workflow runner, provider routing, report writer, and audit log.
+
+```bash
+finagent demo NVDA
+```
+
+Expected output:
+
+```console
+→ fetch  profile…
+✓ profile                   0.00s · $0.0000
+→ fetch  quote…
+✓ quote                     0.00s · $0.0000
+→ fetch  filings…
+✓ filings                   0.00s · $0.0000
+→ report report…
+✓ report                    0.00s · $0.0000
+
+done · 0.0s · $0.0000
+report: reports/NVDA-<date>-demo.md
+audit: audit.jsonl
+```
+
+You can also scaffold a starter project:
+
+```bash
+finagent init my-research-workspace
+cd my-research-workspace
+finagent demo NVDA
+```
+
+### 3. Set your OpenAI key
 
 The `agent` step in the bundled workflow needs one LLM call. Anything OpenAI-compatible works (real OpenAI, Vercel AI Gateway, Azure, local llama.cpp, …).
 
@@ -106,7 +139,7 @@ OPENAI_API_KEY=sk-...
 
 The two default providers — `yfinance` and `sec_edgar` — need **no API keys**. You can already run a real workflow.
 
-### 3. Run the bundled workflow
+### 4. Run the bundled live workflow
 
 ```bash
 finagent run earnings-deep-dive --input ticker=NVDA
@@ -114,7 +147,7 @@ finagent run earnings-deep-dive --input ticker=NVDA
 
 You'll see streaming step output, the runner will fetch quote + profile + filings, ask `gpt-4o-mini` to write a memo, and drop the result at `reports/NVDA-<date>.md`. Total wall time on a typical laptop: **5–10 seconds, ~$0.002 in LLM cost**.
 
-### 4. From Python
+### 5. From Python
 
 ```python
 import asyncio
@@ -140,7 +173,7 @@ asyncio.run(main())
 
 A self-contained version of this script lives at [`examples/quickstart.py`](./examples/quickstart.py).
 
-### 5. Plug in QVeris or your own provider
+### 6. Plug in QVeris or your own provider
 
 Drop a `config.yaml` next to your workflow (template at [`config.example.yaml`](./config.example.yaml)):
 
@@ -160,7 +193,7 @@ finagent providers
 
 Bring-your-own providers (Bloomberg, Refinitiv, an internal API) work the same way — write a 50–100 line subclass of [`DataProvider`](./finagent/providers/base.py) and reference it by dotted path under `type:`. Full guide in [`docs/providers/overview.md`](./docs/providers/overview.md).
 
-### 6. Use as an MCP server (Claude Code, Cursor, Codex, …)
+### 7. Use as an MCP server (Claude Code, Cursor, Codex, …)
 
 The same registry can be exposed as a Model Context Protocol server, so any MCP-compatible client can drive it as if it were a native tool. Three meta-tools are exposed (`discover`, `inspect`, `call`) that mirror the provider protocol; the LLM walks the catalog dynamically without bloating the client's tool list.
 
@@ -184,7 +217,7 @@ Restart your client and ask it _"discover capabilities for NVDA earnings"_ — i
 
 ### What's not in v0.1 yet
 
-`finagent init`, `finagent auth login`, `finagent skill install`, the Web UI, and the `pipx install "openfinagent[ui]"` extra are all on the [roadmap](#roadmap) but not in this release. Star the repo to get notified when they ship.
+PyPI publishing, `finagent auth login`, `finagent skill install`, the Web UI, and the `pipx install "openfinagent[ui]"` extra are all on the [roadmap](#roadmap) but not in this release. Star the repo to get notified when they ship.
 
 ---
 
@@ -206,7 +239,7 @@ OpenFinAgent fixes that by standing on three pillars:
 
 1. **A pluggable data layer.** One `DataProvider` protocol covers free public sources, QVeris's 10,000+ verified capabilities, and any private feed you bring. Swap or stack providers via a single YAML — no vendor lock-in, ever.
 2. **QVeris as the recommended capability layer** *(optional)*. Broadest coverage, zero configuration, instant production-grade data with one API key. Use it when you want to skip 30 vendor contracts.
-3. **A purpose-built agent runtime.** Multi-agent orchestration, a YAML workflow DSL, a plugin-style Skill registry, and a Notebook-first UI designed for analysts and quants — not chatbots.
+3. **A purpose-built agent runtime.** YAML workflows, role-specific LLM steps, audit logs, cost guards, and a planned Skill registry / Web workbench designed for analysts and quants — not chatbots.
 
 Instead of writing 500 lines of glue code to answer *"what's the consensus revision trend for the top 10 S&P semiconductor names this quarter?"* you write a 20-line workflow, ship it to your team as a Skill, and the agent handles discovery, inspection, calling, caching, and reporting.
 
@@ -222,14 +255,14 @@ Instead of writing 500 lines of glue code to answer *"what's the consensus revis
 - **Workflow DSL** — describe a research pipeline in plain YAML; version it, share it, replay it deterministically.
 - **MCP server** — `finagent mcp serve` exposes the entire registry to Claude Code, Cursor, Codex, and any MCP-compatible client through three meta-tools.
 - **Cost & audit, built in** — every Discover → Inspect → Call cycle is traced and budget-capped across all providers. Per-run JSONL audit log out of the box.
-- **CLI + Python API** — `finagent run` from the terminal, or drive the same `Runner` from a Jupyter notebook in 10 lines.
+- **CLI + Python API** — `finagent demo`, `finagent init`, and `finagent run` from the terminal, or drive the same `Runner` from a Jupyter notebook in 10 lines.
 
 **Coming next** *(see [Roadmap](#roadmap))*
 
 - Multi-agent orchestration with Analyst → Quant → Risk → Macro hand-off
 - DuckDB-backed cache and streaming events
 - Skill registry (`finagent skill install ...`)
-- Web UI
+- Web UI workbench
 
 ---
 
@@ -271,7 +304,7 @@ A real working example provider lives at [`finagent/providers/builtin/fred.py`](
 ```mermaid
 flowchart TB
     subgraph UI["Interface Layer"]
-        WebUI["Web UI<br/>(Next.js + AI SDK)"]
+        WebUI["Web UI<br/>(planned)"]
         Notebook["Jupyter / Marimo"]
         CLI["finagent CLI"]
     end
@@ -284,7 +317,7 @@ flowchart TB
     end
 
     subgraph Core["Core Runtime"]
-        Skills["Skill Registry"]
+        Skills["Skill Registry<br/>(planned)"]
         Workflow["Workflow DSL"]
         Memory["Memory & Context"]
     end
@@ -296,7 +329,7 @@ flowchart TB
     end
 
     subgraph Infra["Local Infrastructure"]
-        Cache["DuckDB Cache"]
+        Cache["DuckDB Cache<br/>(planned)"]
         Audit["Audit Log"]
         Budget["Cost Guard"]
     end
@@ -311,11 +344,11 @@ Five layers, each replaceable:
 
 | Layer | Responsibility | Default Implementation |
 |---|---|---|
-| **Interface** | Where humans (or upstream agents) issue intent | Next.js Web UI · Jupyter · `finagent` CLI |
-| **Orchestrator** | Multi-agent role assignment, planning, debate | LangGraph-based, prompts in `agents/*.md` |
-| **Core Runtime** | Skill resolution, workflow execution, shared memory | Python · YAML DSL · SQLite memory |
+| **Interface** | Where humans (or upstream agents) issue intent | `finagent` CLI · Python SDK · Jupyter · Web UI planned |
+| **Orchestrator** | Role-specific agent execution and planned hand-off | Prompt roles in the workflow runner |
+| **Core Runtime** | Workflow execution, context passing, report generation | Python · YAML DSL |
 | **Data Provider Layer** | Discover, inspect, and call capabilities across free / QVeris / BYO providers | `DataProvider` protocol · MCP · Python SDK · REST |
-| **Infrastructure** | Caching, observability, budget enforcement | DuckDB cache · OpenTelemetry · Langfuse-compatible |
+| **Infrastructure** | Traceability, observability, budget enforcement | JSONL audit log · cost guard · cache planned |
 
 ---
 
@@ -325,6 +358,7 @@ Five layers, each replaceable:
 
 | Example | Status | What it does |
 |---|---|---|
+| [`workflows/demo-earnings-deep-dive.yaml`](./workflows/demo-earnings-deep-dive.yaml) | shipped | Offline first-run demo backed by deterministic sample data |
 | [`workflows/earnings-deep-dive.yaml`](./workflows/earnings-deep-dive.yaml) | shipped | Pulls quote, profile, and recent SEC filings, then drafts an analyst memo |
 | [`examples/quickstart.py`](./examples/quickstart.py) | shipped | Same workflow, driven from pure Python (no CLI) |
 | [`examples/sample-report-NVDA.md`](./examples/sample-report-NVDA.md) | shipped | A pre-rendered example of what the workflow produces |
@@ -370,10 +404,10 @@ If you want to help shape the registry design, open an issue with the `skills` l
 
 ## Roadmap
 
-- [x] **v0.1** *(this release)* — `DataProvider` protocol, 4 built-in providers (yfinance, sec_edgar, fred, qveris), workflow YAML DSL, `finagent` CLI, OpenAI-compatible LLM step, audit log, cost guard, MCP server (`finagent mcp serve`).
-- [ ] **v0.2** — Multi-agent orchestration (Analyst → Quant → Risk → Macro hand-off), 5 more workflows, DuckDB cache, streaming events.
+- [x] **v0.1** *(this release)* — `DataProvider` protocol, 5 built-in providers (sample, yfinance, sec_edgar, fred, qveris), workflow YAML DSL, `finagent` CLI, `finagent init`, `finagent demo`, OpenAI-compatible LLM step, audit log, cost guard, MCP server (`finagent mcp serve`).
+- [ ] **v0.2** — PyPI release, `finagent doctor`, first-run diagnostics, richer examples, package verification.
 - [ ] **v0.3** — Skill registry (`finagent skill install ...`), richer provider catalog, workflow templates.
-- [ ] **v0.4** — Web UI (Next.js), workflow visual editor, Langfuse tracing.
+- [ ] **v0.4** — Web UI workbench (Next.js), workflow run console, report preview, audit timeline, Langfuse tracing.
 - [ ] **v0.5** — Multi-tenant deployment, RBAC, self-hosted Docker compose.
 - [ ] **v0.6** — Skill Hub with ratings, signed packages.
 - [ ] **v1.0** — Production SLA, enterprise SSO, on-prem QVeris bridge.

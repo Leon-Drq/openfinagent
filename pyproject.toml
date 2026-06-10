@@ -55,11 +55,18 @@ Issues = "https://github.com/Leon-Drq/openfinagent/issues"
 [tool.hatch.build.targets.wheel]
 packages = ["finagent"]
 
+[tool.hatch.build.targets.wheel.force-include]
+"workflows" = "workflows"
+"config.example.yaml" = "config.example.yaml"
+".env.example" = ".env.example"
+
 [tool.hatch.build.targets.sdist]
 include = [
   "/finagent",
   "/workflows",
   "/examples",
+  "/config.example.yaml",
+  "/.env.example",
   "/README.md",
   "/LICENSE",
 ]

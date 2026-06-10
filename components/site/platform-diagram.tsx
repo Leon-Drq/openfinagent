@@ -49,11 +49,11 @@ export function PlatformDiagram() {
 
   // ---------- BOTTOM : surfaces ----------
   const surfaces = [
-    { label: "Web UI", note: "Next.js" },
+    { label: "Web UI", note: "planned" },
     { label: "Notebook", note: "Jupyter . Marimo" },
-    { label: "CLI", note: "qfin run" },
-    { label: "MCP Server", note: "stdio . http" },
-    { label: "REST API", note: "OpenAPI" },
+    { label: "CLI", note: "finagent run" },
+    { label: "MCP Server", note: "stdio" },
+    { label: "REST API", note: "planned" },
   ]
   const surfY = 728
   const surfH = 54
@@ -335,7 +335,7 @@ export function PlatformDiagram() {
         )
       })}
 
-      {/* ---- Center : Studio Core ---- */}
+      {/* ---- Center : Runtime Core ---- */}
       <rect
         x={coreX - 6}
         y={coreY - 6}
@@ -347,7 +347,7 @@ export function PlatformDiagram() {
       <rect x={coreX} y={coreY} width={coreW} height={coreH} rx={14} className="core-rect" />
 
       <text x={coreX + coreW / 2} y={coreY + 30} textAnchor="middle" className="label-core-title">
-        Studio Core . Orchestration Engine
+        Runtime Core . Workflow Engine
       </text>
       <line
         x1={coreX + 24}

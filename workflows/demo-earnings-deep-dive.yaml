@@ -1,0 +1,94 @@
+# demo-earnings-deep-dive
+# -----------------------
+# A no-network, no-LLM first-run workflow backed by the built-in
+# SampleProvider. It proves the runtime, routing, report writing, and audit
+# log before the user connects live data or an OpenAI-compatible model.
+
+name: demo-earnings-deep-dive
+description: >
+  Generate a deterministic sample research brief for a supported ticker.
+  This workflow is for onboarding only; it is not live market data.
+
+inputs:
+  ticker:
+    type: string
+    default: NVDA
+    description: "Sample ticker symbol: NVDA, AAPL, or MSFT."
+  output_dir:
+    type: string
+    default: reports
+    description: Directory where the demo report will be written.
+
+steps:
+  - id: profile
+    type: fetch
+    capability: equity.profile
+    provider: sample
+    params:
+      ticker: ${ticker}
+
+  - id: quote
+    type: fetch
+    capability: equity.quote
+    provider: sample
+    params:
+      ticker: ${ticker}
+
+  - id: filings
+    type: fetch
+    capability: filings.recent
+    provider: sample
+    params:
+      ticker: ${ticker}
+      forms: ["10-K", "10-Q", "8-K"]
+      limit: 5
+
+  - id: report
+    type: report
+    path: ${output_dir}/${ticker}-${run_date}-demo.md
+    template: |
+      # ${ticker} - Demo Research Brief
+
+      _Generated ${run_date} - run ${run_id}_
+
+      > Demo mode uses deterministic sample data from OpenFinAgent's built-in
+      > SampleProvider. It is not live market data and is not investment advice.
+
+      ## Company Snapshot
+
+      - **Name:** ${profile.name}
+      - **Sector / industry:** ${profile.sector} / ${profile.industry}
+      - **Country:** ${profile.country}
+      - **Employees:** ${profile.employees}
+      - **Website:** ${profile.website}
+      - **Sample data date:** ${profile.sample_as_of}
+
+      ${profile.summary}
+
+      ## Quote Snapshot
+
+      - **Last price:** ${quote.price} ${quote.currency}
+      - **Previous close:** ${quote.previous_close}
+      - **Day range:** ${quote.day_low} - ${quote.day_high}
+      - **Volume:** ${quote.volume}
+      - **Market cap:** ${quote.market_cap}
+
+      ## Recent Filing Metadata
+
+      ```json
+      ${filings.filings}
+      ```
+
+      ## What This Demo Proves
+
+      1. The workflow DSL can resolve inputs and pass context between steps.
+      2. The provider registry can route calls through a pluggable data source.
+      3. The runner writes a report and audit log without external services.
+
+      ## Next Step
+
+      Run the live workflow after setting an OpenAI-compatible key:
+
+      ```bash
+      finagent run earnings-deep-dive --input ticker=${ticker}
+      ```

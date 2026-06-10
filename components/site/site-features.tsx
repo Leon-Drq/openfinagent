@@ -2,12 +2,12 @@ import { SectionHeading } from "./site-why"
 
 const features = [
   {
-    title: "Multi-agent teams",
-    body: "Pre-built Analyst, Quant, Risk Officer, and Macro Strategist roles with role-specific prompts and tool scopes.",
+    title: "Offline first run",
+    body: "Run a deterministic demo report without network access, data credentials, or an LLM key.",
   },
   {
-    title: "Skill packages",
-    body: "Drop-in pip-installable analysis modules: factor models, filings parsers, ETF screeners, credit-spread monitors.",
+    title: "Provider protocol",
+    body: "Route one workflow across sample data, free public providers, QVeris, or private feeds through the same interface.",
   },
   {
     title: "Workflow DSL",
@@ -22,8 +22,8 @@ const features = [
     body: "Every Discover → Inspect → Call cycle is traced, cached, and budget-capped. No surprise invoices.",
   },
   {
-    title: "Notebook-first output",
-    body: "Reports render as Markdown, Jupyter, or live dashboards. Meet analysts where they already work.",
+    title: "Report artifacts",
+    body: "Every run can produce Markdown reports and JSONL audit logs that are easy to inspect, diff, and archive.",
   },
 ]
 

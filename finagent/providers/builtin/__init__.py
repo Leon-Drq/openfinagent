@@ -8,6 +8,7 @@ forcing every dependency on every user.
 
 from finagent.providers.builtin.fred import FredProvider
 from finagent.providers.builtin.qveris import QverisProvider
+from finagent.providers.builtin.sample import SampleProvider
 from finagent.providers.builtin.sec_edgar import SecEdgarProvider
 from finagent.providers.builtin.yfinance_provider import YFinanceProvider
 
@@ -18,6 +19,7 @@ BUILTIN_PROVIDERS = {
     "builtin.sec_edgar": SecEdgarProvider,
     "builtin.fred": FredProvider,
     "builtin.qveris": QverisProvider,
+    "builtin.sample": SampleProvider,
 }
 
 __all__ = [
@@ -25,5 +27,6 @@ __all__ = [
     "SecEdgarProvider",
     "FredProvider",
     "QverisProvider",
+    "SampleProvider",
     "BUILTIN_PROVIDERS",
 ]

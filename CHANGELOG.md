@@ -7,6 +7,20 @@ reaches v1.0.
 
 ## [Unreleased]
 
+### Added
+
+- `finagent demo` runs a no-network, no-LLM first-run workflow using the
+  built-in deterministic `sample` provider.
+- `finagent init` scaffolds a starter workspace with config, env template,
+  and live/offline workflows.
+- `workflows/demo-earnings-deep-dive.yaml` for offline onboarding.
+
+### Changed
+
+- Wheel build configuration now includes bundled workflows and starter
+  config templates so packaged installs can resolve built-in workflows.
+- README quickstarts now lead with the offline demo before live LLM setup.
+
 ## [0.1.0] — 2026-04-29
 
 Initial public preview. The minimum viable end-to-end path is shipped:
@@ -28,7 +42,7 @@ clone the repo, set `OPENAI_API_KEY`, run `finagent run earnings-deep-dive
   routing policies, per-provider and global per-run budget caps, and an
   audit-friendly `_charge` accounting loop.
 - YAML workflow DSL with three step kinds: `fetch`, `agent`, `report`.
-  Mustache-style `{{ inputs.x }}` / `{{ steps.y }}` templating.
+  `${name}` / `${name.path}` templating.
 - `Runner` — orchestrates a workflow end to end, emits per-step events,
   writes a JSONL `audit.jsonl`, and returns a `RunResult` with elapsed
   time, total spend, and the report path.

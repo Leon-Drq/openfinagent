@@ -26,7 +26,7 @@ export function SiteWhy() {
               <Pillar
                 tag="02"
                 title="A purpose-built agent runtime"
-                body="Multi-agent orchestration, a YAML workflow DSL, a plugin-style Skill registry, and a Notebook-first UI designed for analysts and quants."
+                body="YAML workflows, role-specific LLM steps, audit logs, cost guards, and a planned Skill registry / Web workbench for analysts and quants."
               />
               <Pillar
                 tag="03"
@@ -56,12 +56,11 @@ export function SiteWhy() {
                   </p>
                   <pre className="mt-3 overflow-x-auto rounded-md bg-secondary p-4 font-mono text-[12px] leading-relaxed">
                     <code>
-                      <span className="text-muted-foreground"># consensus revisions, top-10 SOX</span>{"\n"}
-                      studio.run({"\n"}
-                      {"  "}workflow=<span className="text-primary">"consensus-revisions"</span>,{"\n"}
-                      {"  "}universe=<span className="text-primary">"SOX:top10"</span>,{"\n"}
-                      {"  "}budget_usd=<span className="text-accent-foreground">1.50</span>,{"\n"}
-                      )
+                      <span className="text-muted-foreground"># first run, no external services</span>{"\n"}
+                      finagent demo <span className="text-primary">NVDA</span>{"\n\n"}
+                      <span className="text-muted-foreground"># live workflow after setting OPENAI_API_KEY</span>{"\n"}
+                      finagent run earnings-deep-dive \\{"\n"}
+                      {"  "}--input ticker=<span className="text-primary">NVDA</span>
                     </code>
                   </pre>
                 </div>
@@ -97,9 +96,11 @@ function Pillar({
 export function SectionHeading({
   eyebrow,
   title,
+  description,
 }: {
   eyebrow: string
   title: string
+  description?: string
 }) {
   return (
     <div className="max-w-3xl">
@@ -109,6 +110,11 @@ export function SectionHeading({
       <h2 className="mt-4 font-serif text-3xl leading-tight tracking-tight text-balance md:text-5xl">
         {title}
       </h2>
+      {description && (
+        <p className="mt-5 max-w-2xl leading-relaxed text-muted-foreground">
+          {description}
+        </p>
+      )}
     </div>
   )
 }

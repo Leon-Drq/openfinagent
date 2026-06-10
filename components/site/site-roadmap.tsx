@@ -7,8 +7,8 @@ const milestones = [
     state: "done" as const,
     bullets: [
       "CLI · core runtime",
-      "5 starter agents",
-      "20 starter skills",
+      "init · demo",
+      "5 providers",
       "MCP server",
     ],
   },
@@ -17,9 +17,9 @@ const milestones = [
     status: "In progress",
     state: "active" as const,
     bullets: [
-      "Web UI (Next.js + AI SDK 6)",
-      "Workflow visual editor",
-      "Langfuse / OpenTelemetry tracing",
+      "PyPI release",
+      "finagent doctor",
+      "package verification",
     ],
   },
   {
@@ -27,9 +27,9 @@ const milestones = [
     status: "Planned",
     state: "todo" as const,
     bullets: [
-      "Multi-tenant deployment",
-      "RBAC & audit export",
-      "Self-hosted Docker compose",
+      "Skill registry",
+      "workflow templates",
+      "provider catalog",
     ],
   },
   {
@@ -37,9 +37,9 @@ const milestones = [
     status: "Planned",
     state: "todo" as const,
     bullets: [
-      "Skill Hub with ratings",
-      "Signed packages",
-      "Paid skills marketplace",
+      "Web workbench",
+      "audit timeline",
+      "report preview",
     ],
   },
   {
@@ -47,9 +47,9 @@ const milestones = [
     status: "Vision",
     state: "todo" as const,
     bullets: [
-      "Production SLA",
-      "Enterprise SSO",
-      "On-prem QVeris bridge",
+      "team controls",
+      "signed skills",
+      "on-prem bridge",
     ],
   },
 ]
@@ -60,7 +60,7 @@ export function SiteRoadmap() {
       <div className="mx-auto w-full max-w-6xl px-6 py-20 md:py-28">
         <SectionHeading
           eyebrow="Roadmap"
-          title="Where we&apos;re headed in the next four quarters."
+          title="The path from first run to production workflow."
         />
 
         <ol className="mt-14 grid gap-6 md:grid-cols-5">

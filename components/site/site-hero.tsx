@@ -37,7 +37,7 @@ export function SiteHero() {
           </Link>
           &apos;s{" "}
           <span className="font-mono text-foreground">10,000+</span> verified
-          capabilities — behind one SDK, CLI, and Web UI.
+          capabilities — behind one SDK, CLI, MCP surface, and upcoming Web UI.
         </p>
 
         <div className="mt-12 flex flex-wrap items-center gap-3">
@@ -73,8 +73,8 @@ export function SiteHero() {
         {/* stat strip */}
         <div className="mt-20 grid grid-cols-2 gap-y-6 border-t border-border pt-8 md:grid-cols-4">
           <Stat label="Verified capabilities" value="10,000+" />
-          <Stat label="Pre-built agents" value="5" />
-          <Stat label="Starter skills" value="20" />
+          <Stat label="Offline demo" value="0 keys" />
+          <Stat label="Built-in providers" value="5" />
           <Stat label="License" value="Apache 2.0" mono={false} />
         </div>
       </div>

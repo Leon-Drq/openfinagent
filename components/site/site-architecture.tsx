@@ -3,20 +3,20 @@ import { SectionHeading } from "./site-why"
 const layers = [
   {
     label: "Interface",
-    code: "Web UI · Notebook · CLI",
+    code: "CLI · Notebook · Web UI planned",
     desc: "Where humans or upstream agents issue intent.",
     contract: "Intent",
   },
   {
     label: "Orchestrator",
     code: "Analyst · Quant · Risk · Macro",
-    desc: "Multi-agent role assignment, planning, and debate.",
+    desc: "Role-specific agent prompts and planned multi-agent hand-off.",
     contract: "Plan",
   },
   {
     label: "Core Runtime",
-    code: "Skill Registry · Workflow DSL · Memory",
-    desc: "Skill resolution, workflow execution, shared context.",
+    code: "Workflow DSL · Skill Registry planned",
+    desc: "Workflow execution, context passing, and report generation.",
     contract: "Trace",
   },
   {
@@ -28,8 +28,8 @@ const layers = [
   },
   {
     label: "Infrastructure",
-    code: "DuckDB Cache · Audit Log · Cost Guard",
-    desc: "Caching, observability, and budget enforcement.",
+    code: "Audit Log · Cost Guard · Cache planned",
+    desc: "Traceability, observability, and budget enforcement.",
     contract: "Evidence",
   },
 ]
@@ -48,7 +48,7 @@ const cycle = [
   {
     step: "Call",
     title: "Execute, cache, audit",
-    body: "Calls run through MCP, write to DuckDB, and leave a replayable audit trail.",
+    body: "Calls run through the provider protocol and leave a replayable JSONL audit trail.",
   },
 ]
 

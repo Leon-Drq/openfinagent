@@ -9,11 +9,11 @@ Tests that don't hit the network.  Verify the runtime plumbing:
 
 from __future__ import annotations
 
-import asyncio
 from pathlib import Path
 from typing import Any, Sequence
 
 import pytest
+from typer.testing import CliRunner
 
 from finagent import (
     Capability,
@@ -24,6 +24,7 @@ from finagent import (
     RoutingPolicy,
     Runner,
 )
+from finagent.cli import app
 from finagent.runtime.registry import BudgetExceeded
 
 
@@ -146,3 +147,44 @@ steps:
     assert len(kinds) >= 2
 
     await registry.teardown()
+
+
+def test_demo_cli_generates_report(tmp_path: Path) -> None:
+    runner = CliRunner()
+    report_dir = tmp_path / "reports"
+    audit_path = tmp_path / "audit.jsonl"
+
+    result = runner.invoke(
+        app,
+        [
+            "demo",
+            "NVDA",
+            "--output-dir",
+            str(report_dir),
+            "--audit",
+            str(audit_path),
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    # The exact date depends on the runner clock; keep the assertion robust.
+    reports = list(report_dir.glob("NVDA-*-demo.md"))
+    assert len(reports) == 1
+    body = reports[0].read_text(encoding="utf-8")
+    assert "Demo Research Brief" in body
+    assert "SampleProvider" in body
+    assert audit_path.exists()
+    assert "provider" in audit_path.read_text(encoding="utf-8")
+
+
+def test_init_cli_scaffolds_project(tmp_path: Path) -> None:
+    runner = CliRunner()
+    target = tmp_path / "starter"
+
+    result = runner.invoke(app, ["init", str(target)])
+
+    assert result.exit_code == 0, result.output
+    assert (target / "finagent.yaml").exists()
+    assert (target / ".env.example").exists()
+    assert (target / "workflows" / "earnings-deep-dive.yaml").exists()
+    assert (target / "workflows" / "demo-earnings-deep-dive.yaml").exists()

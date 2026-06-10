@@ -44,15 +44,12 @@ export function SiteNav() {
             size="sm"
             className="hidden sm:inline-flex"
           >
-            <Link href="#docs">Docs</Link>
+            <Link href="#quickstart">Docs</Link>
           </Button>
           <Button asChild size="sm" className="gap-1.5">
             <Link href="https://github.com/Leon-Drq/openfinagent" target="_blank" rel="noreferrer">
               <Github className="h-3.5 w-3.5" aria-hidden />
               <span>Star</span>
-              <span className="ml-1 rounded bg-primary-foreground/15 px-1.5 py-0.5 font-mono text-[10px]">
-                0
-              </span>
             </Link>
           </Button>
         </div>

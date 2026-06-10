@@ -3,35 +3,32 @@ import { SectionHeading } from "./site-why"
 const steps = [
   {
     title: "Install the package",
-    desc: "One pip command. UI extras are optional.",
-    code: `pip install openfinagent
-# with the Web UI:
-pipx install "openfinagent[ui]"`,
+    desc: "Clone today; PyPI packaging is the next release milestone.",
+    code: `git clone https://github.com/Leon-Drq/openfinagent.git
+cd openfinagent
+pip install -e .`,
   },
   {
-    title: "Connect QVeris",
-    desc: "OAuth into your QVeris account; verify MCP and budget settings.",
-    code: `finagent auth login
-finagent doctor`,
+    title: "Run offline first",
+    desc: "No network, no data key, no LLM key. Verify the runtime locally.",
+    code: `finagent demo NVDA
+# writes reports/NVDA-<date>-demo.md
+# writes audit.jsonl`,
   },
   {
-    title: "Run a workflow",
-    desc: "Stream the agent team as they reason through the task.",
-    code: `finagent run examples/earnings-deep-dive.yaml \\
-  --ticker NVDA --budget-usd 2.00`,
+    title: "Create a workspace",
+    desc: "Scaffold config, env template, and live/offline workflows.",
+    code: `finagent init my-research-workspace
+cd my-research-workspace
+finagent demo NVDA`,
   },
   {
-    title: "Or call from Python",
-    desc: "Same engine, embedded in your notebook or service.",
-    code: `from finagent import Studio
-
-studio = Studio.from_env()
-report = studio.run(
-    workflow="earnings-deep-dive",
-    inputs={"ticker": "NVDA"},
-    budget_usd=2.00,
-)
-report.to_notebook("nvda.ipynb")`,
+    title: "Run live research",
+    desc: "Add an OpenAI-compatible key, then fetch public data and draft a memo.",
+    code: `cp .env.example .env
+# set OPENAI_API_KEY
+finagent run earnings-deep-dive \\
+  --input ticker=NVDA`,
   },
 ]
 
@@ -41,7 +38,7 @@ export function SiteQuickstart() {
       <div className="mx-auto w-full max-w-6xl px-6 py-20 md:py-28">
         <SectionHeading
           eyebrow="Quickstart"
-          title="From zero to your first report in four steps."
+          title="From zero to a traced report in four steps."
         />
 
         <ol className="mt-12 grid gap-6 md:grid-cols-2">
@@ -76,7 +73,7 @@ export function SiteQuickstart() {
           </span>
           <span>Run as a server for Claude Code, Cursor, Codex:</span>
           <code className="rounded bg-secondary px-2 py-1 font-mono text-xs">
-            finagent mcp serve --port 8765
+            finagent mcp serve
           </code>
         </div>
       </div>

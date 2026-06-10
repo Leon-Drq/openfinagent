@@ -6,7 +6,7 @@
 
 **开源金融 Agent 工作台——自带数据源也好，接入 [QVeris](https://qveris.ai) 一键满血也好。**
 
-用多智能体团队组合投研、尽调和量化研究工作流，在免费公开数据、私有数据源、QVeris 1 万+ 经过验证的能力之间自由路由——只需一套 SDK、CLI 和（即将推出的）Web UI。
+用多智能体团队组合投研、尽调和量化研究工作流，在免费公开数据、私有数据源、QVeris 1 万+ 经过验证的能力之间自由路由——只需一套 SDK、CLI、MCP 接口和（即将推出的）Web UI。
 
 [English](./README.md) · [快速开始](#快速开始) · [数据源说明](./docs/providers/overview.md) · [路线图](#路线图) · [更新日志](./CHANGELOG.md)
 
@@ -28,7 +28,7 @@
 
 - **可插拔的数据层**——一套 `DataProvider` 协议同时覆盖免费公开源（FRED、yfinance、SEC EDGAR）、QVeris 的 1 万+ 经过验证的能力，以及任何你自己接入的私有数据（Bloomberg、Refinitiv、内部数据库）。一份 YAML 即可叠加或切换。
 - **QVeris 作为推荐能力层**——覆盖最广、零配置、一个 API key 即可获得生产级数据。可选，绝不强制。
-- **专为金融场景的 Agent 运行时**——多智能体编排、YAML 工作流 DSL、插件式 Skill 注册中心、Notebook 优先的 UI。
+- **专为金融场景的 Agent 运行时**——YAML 工作流、角色化 LLM 步骤、审计日志、成本守卫，以及规划中的 Skill 注册中心和 Web workbench。
 
 > **它不是什么：** 不是交易机器人、智能投顾或 ChatGPT 套壳。它是一个*研究和工作流*平台——服务于不想花两万美元订 Bloomberg 又要生产级工具链的分析师、PM、Fintech 工程师和独立研究者。
 
@@ -36,7 +36,7 @@
 
 ## 实际跑起来什么样
 
-一条命令、免费数据源、一份完整备忘——除了 LLM 那一步以外**不需要任何付费 key**。
+一条命令、免费数据源、一份完整备忘——实时 LLM 步骤只需要一个兼容 OpenAI 的 key。想先验证运行时，可以直接跑 `finagent demo NVDA`，完全离线、无网络、无数据源 key。
 
 ```console
 $ finagent run earnings-deep-dive --input ticker=NVDA
@@ -75,9 +75,9 @@ $ finagent run earnings-deep-dive --input ticker=NVDA
 - **工作流 DSL**——用纯 YAML 描述研究流水线，可版本化、可分享、可复现。
 - **MCP server**——`finagent mcp serve` 把整个 registry 暴露给 Claude Code、Cursor、Codex 等任何 MCP 客户端，仅通过三个元工具（discover / inspect / call）即可驱动。
 - **成本与审计内建**——每次 Discover → Inspect → Call 都被追踪和按预算管控。开箱即用的 JSONL 审计日志。
-- **CLI + Python API**——终端用 `finagent run`，Notebook 里 10 行代码驱动同一个 Runner。
+- **CLI + Python API**——终端用 `finagent demo`、`finagent init`、`finagent run`，Notebook 里 10 行代码驱动同一个 Runner。
 
-**即将推出**（详见[路线图](#路线图)）：多智能体编排（分析师 → 量化 → 风控 → 宏观协作）、DuckDB 缓存与流式事件、Skill 注册中心（`finagent skill install ...`）、Web UI。
+**即将推出**（详见[路线图](#路线图)）：PyPI 发布、`finagent doctor`、Skill 注册中心（`finagent skill install ...`）、Web UI workbench。
 
 ---
 
@@ -97,7 +97,23 @@ pip install -e .
 # pip install openfinagent
 ```
 
-### 2. 配置 OpenAI key
+### 2. 先跑离线 demo
+
+这一步不需要网络、不需要 OpenAI key、不需要任何数据源 key，用内置 sample provider 验证 workflow runner、provider 路由、报告输出和审计日志。
+
+```bash
+finagent demo NVDA
+```
+
+你也可以先初始化一个独立项目目录：
+
+```bash
+finagent init my-research-workspace
+cd my-research-workspace
+finagent demo NVDA
+```
+
+### 3. 配置 OpenAI key
 
 预置工作流里的 `agent` 步骤需要一次 LLM 调用，任何兼容 OpenAI Chat Completions 协议的服务都可以（真 OpenAI、Vercel AI Gateway、Azure、Groq、本地 llama.cpp 等）。
 
@@ -110,7 +126,7 @@ OPENAI_API_KEY=sk-...
 
 默认的两个 provider —— `yfinance` 和 `sec_edgar` —— **完全不需要 API key**。
 
-### 3. 跑通预置工作流
+### 4. 跑通实时预置工作流
 
 ```bash
 finagent run earnings-deep-dive --input ticker=NVDA
@@ -118,7 +134,7 @@ finagent run earnings-deep-dive --input ticker=NVDA
 
 会看到流式步骤输出，runner 会拉取 quote + profile + filings，调用 `gpt-4o-mini` 写一份备忘录，结果落到 `reports/NVDA-<date>.md`。普通笔记本上整个流程 5–10 秒、约 $0.002。
 
-### 4. 从 Python 调用
+### 5. 从 Python 调用
 
 ```python
 import asyncio
@@ -144,7 +160,7 @@ asyncio.run(main())
 
 完整自包含脚本见 [`examples/quickstart.py`](./examples/quickstart.py)。
 
-### 5. 接入 QVeris 或自有 provider
+### 6. 接入 QVeris 或自有 provider
 
 在工作流旁边放一个 `config.yaml`（模板见 [`config.example.yaml`](./config.example.yaml)）：
 
@@ -164,7 +180,7 @@ finagent providers
 
 自带 provider（Bloomberg / Refinitiv / 内部 API）的写法相同——继承 [`DataProvider`](./finagent/providers/base.py) 写 50–100 行子类，用 `type:` 引用即可。详见 [`docs/providers/overview.md`](./docs/providers/overview.md)。
 
-### 6. 作为 MCP server 使用
+### 7. 作为 MCP server 使用
 
 ```bash
 pip install -e ".[mcp]"
@@ -184,7 +200,7 @@ pip install -e ".[mcp]"
 
 ### 当前 v0.1 还没有的功能
 
-`finagent init`、`finagent auth login`、`finagent skill install`、Web UI 等都在[路线图](#路线图)上但还没发布。Star 仓库即可第一时间收到通知。
+PyPI 发布、`finagent auth login`、`finagent skill install`、Web UI 等都在[路线图](#路线图)上但还没发布。Star 仓库即可第一时间收到通知。
 
 ---
 
@@ -204,10 +220,10 @@ pip install -e ".[mcp]"
 
 ## 路线图
 
-- [x] **v0.1**（本次发布）—— `DataProvider` 协议、4 个内置 provider（yfinance / sec_edgar / fred / qveris）、工作流 YAML DSL、`finagent` CLI、兼容 OpenAI 协议的 LLM 步骤、审计日志、成本守卫、MCP server。
-- [ ] **v0.2** —— 多智能体编排（分析师 → 量化 → 风控 → 宏观协作）、5 个新工作流、DuckDB 缓存、流式事件。
+- [x] **v0.1**（本次发布）—— `DataProvider` 协议、5 个内置 provider（sample / yfinance / sec_edgar / fred / qveris）、工作流 YAML DSL、`finagent` CLI、`finagent init`、`finagent demo`、兼容 OpenAI 协议的 LLM 步骤、审计日志、成本守卫、MCP server。
+- [ ] **v0.2** —— PyPI 发布、`finagent doctor`、首次运行诊断、更丰富示例、包验证。
 - [ ] **v0.3** —— Skill 注册中心（`finagent skill install ...`）、更丰富的 provider 目录、工作流模板。
-- [ ] **v0.4** —— Web UI（Next.js）、工作流可视化编辑器、Langfuse 追踪。
+- [ ] **v0.4** —— Web UI workbench（Next.js）、运行控制台、报告预览、审计时间线、Langfuse 追踪。
 - [ ] **v0.5** —— 多租户部署、RBAC、自托管 Docker compose。
 - [ ] **v0.6** —— Skill Hub 评分、签名分发包。
 - [ ] **v1.0** —— 生产 SLA、企业 SSO、私有化 QVeris 桥接。
