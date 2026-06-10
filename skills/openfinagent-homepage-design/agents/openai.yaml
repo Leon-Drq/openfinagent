@@ -1,0 +1,4 @@
+interface:
+  display_name: "OpenFinAgent Homepage Design"
+  short_description: "Premium finance homepage design system"
+  default_prompt: "Use $openfinagent-homepage-design to design a premium finance product homepage."
