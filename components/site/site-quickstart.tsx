@@ -9,9 +9,10 @@ cd openfinagent
 pip install -e .`,
   },
   {
-    title: "Run offline first",
-    desc: "No network, no data key, no LLM key. Verify the runtime locally.",
-    code: `finagent demo NVDA
+    title: "Check and run offline",
+    desc: "No data key, no LLM key. Diagnose first, then verify the runtime locally.",
+    code: `finagent doctor --no-network
+finagent demo NVDA
 # writes reports/NVDA-<date>-demo.md
 # writes audit.jsonl`,
   },
@@ -20,6 +21,7 @@ pip install -e .`,
     desc: "Scaffold config, env template, and live/offline workflows.",
     code: `finagent init my-research-workspace
 cd my-research-workspace
+finagent doctor --no-network
 finagent demo NVDA`,
   },
   {

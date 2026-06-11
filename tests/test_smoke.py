@@ -9,6 +9,7 @@ Tests that don't hit the network.  Verify the runtime plumbing:
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
 from typing import Any, Sequence
 
@@ -188,3 +189,27 @@ def test_init_cli_scaffolds_project(tmp_path: Path) -> None:
     assert (target / ".env.example").exists()
     assert (target / "workflows" / "earnings-deep-dive.yaml").exists()
     assert (target / "workflows" / "demo-earnings-deep-dive.yaml").exists()
+
+
+def test_doctor_cli_no_network_passes() -> None:
+    runner = CliRunner()
+
+    result = runner.invoke(app, ["doctor", "--no-network"])
+
+    assert result.exit_code == 0, result.output
+    assert "OpenFinAgent doctor" in result.output
+    assert "offline demo" in result.output
+    assert "doctor found no blocking issues" in result.output
+
+
+def test_doctor_cli_json_output() -> None:
+    runner = CliRunner()
+
+    result = runner.invoke(app, ["doctor", "--no-network", "--json"])
+
+    assert result.exit_code == 0, result.output
+    payload = json.loads(result.output)
+    names = {item["name"] for item in payload}
+    assert "python" in names
+    assert "workflows" in names
+    assert "offline demo" in names

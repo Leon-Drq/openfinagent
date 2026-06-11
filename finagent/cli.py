@@ -2,8 +2,11 @@
 finagent.cli
 ============
 
-Typer-based CLI.  Three commands are wired up for v0.x:
+Typer-based CLI.  Core commands for v0.x:
 
+    finagent init [path]
+    finagent demo [ticker]
+    finagent doctor
     finagent run <workflow> [--input k=v ...]
     finagent providers list
     finagent version
@@ -15,6 +18,7 @@ Install ``openfinagent`` and the entry point ``finagent`` is on
 from __future__ import annotations
 
 import asyncio
+import json
 import shutil
 from pathlib import Path
 
@@ -31,6 +35,7 @@ from finagent.config import (
     parse_policy,
     parse_providers,
 )
+from finagent.doctor import DoctorCheck, has_failures, run_doctor
 from finagent.runtime.llm import LLMClient
 from finagent.runtime.registry import ProviderRegistry
 from finagent.runtime.runner import Runner
@@ -164,6 +169,29 @@ def _copy_file(source: Path, dest: Path, *, force: bool) -> bool:
     return True
 
 
+def _render_doctor_table(checks: list[DoctorCheck]) -> None:
+    table = Table(title="OpenFinAgent doctor", title_style="bold")
+    table.add_column("check", style="cyan")
+    table.add_column("status")
+    table.add_column("detail")
+    table.add_column("fix")
+
+    styles = {
+        "pass": "green",
+        "warn": "yellow",
+        "fail": "red",
+    }
+    for check in checks:
+        table.add_row(
+            check.name,
+            Text(check.status, style=styles[check.status]),
+            Text(check.detail),
+            Text(check.fix) if check.fix else Text("-", style="dim"),
+        )
+
+    console.print(table)
+
+
 # ---------------------------------------------------------------------------
 # Commands
 # ---------------------------------------------------------------------------
@@ -174,6 +202,54 @@ def version() -> None:
     """Print the openfinagent version."""
 
     console.print(f"openfinagent [bold]{__version__}[/bold]")
+
+
+@app.command(name="doctor")
+def doctor_cmd(
+    config: str | None = typer.Option(
+        None, "--config", "-c", help="Path to config.yaml / finagent.yaml."
+    ),
+    network: bool = typer.Option(
+        True,
+        "--network/--no-network",
+        help="Check live provider endpoints.",
+    ),
+    timeout: float = typer.Option(
+        5.0,
+        "--timeout",
+        min=1.0,
+        max=30.0,
+        help="Network check timeout in seconds.",
+    ),
+    json_output: bool = typer.Option(
+        False,
+        "--json",
+        help="Print machine-readable JSON.",
+    ),
+) -> None:
+    """Check local setup and explain what to fix before running workflows."""
+
+    _load_dotenv()
+    checks = asyncio.run(
+        run_doctor(
+            config_path=config,
+            network=network,
+            timeout_seconds=timeout,
+        )
+    )
+
+    if json_output:
+        console.file.write(json.dumps([check.to_dict() for check in checks], indent=2))
+        console.file.write("\n")
+    else:
+        _render_doctor_table(checks)
+        if has_failures(checks):
+            console.print("[red]doctor found blocking issues.[/red]")
+        else:
+            console.print("[green]doctor found no blocking issues.[/green]")
+
+    if has_failures(checks):
+        raise typer.Exit(code=1)
 
 
 @app.command(name="init")

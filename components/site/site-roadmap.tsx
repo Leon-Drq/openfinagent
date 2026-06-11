@@ -7,7 +7,7 @@ const milestones = [
     state: "done" as const,
     bullets: [
       "CLI · core runtime",
-      "init · demo",
+      "init · demo · doctor",
       "5 providers",
       "MCP server",
     ],
@@ -18,7 +18,7 @@ const milestones = [
     state: "active" as const,
     bullets: [
       "PyPI release",
-      "finagent doctor",
+      "release workflow",
       "package verification",
     ],
   },

@@ -43,6 +43,10 @@ dev = [
   "ruff>=0.5",
   "mypy>=1.10",
 ]
+release = [
+  "build>=1.2",
+  "twine>=5.1",
+]
 
 [project.scripts]
 finagent = "finagent.cli:app"
@@ -65,6 +69,7 @@ include = [
   "/finagent",
   "/workflows",
   "/examples",
+  "/docs",
   "/config.example.yaml",
   "/.env.example",
   "/README.md",

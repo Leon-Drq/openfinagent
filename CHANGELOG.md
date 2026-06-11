@@ -13,13 +13,20 @@ reaches v1.0.
   built-in deterministic `sample` provider.
 - `finagent init` scaffolds a starter workspace with config, env template,
   and live/offline workflows.
+- `finagent doctor` diagnoses Python version, package import, bundled
+  workflows, dependencies, provider config, optional credentials, offline demo
+  viability, and optional live endpoint reachability.
 - `workflows/demo-earnings-deep-dive.yaml` for offline onboarding.
+- GitHub Actions publishing workflow for TestPyPI / PyPI Trusted Publishing.
+- Release guide at `docs/release.md`.
 
 ### Changed
 
 - Wheel build configuration now includes bundled workflows and starter
   config templates so packaged installs can resolve built-in workflows.
 - README quickstarts now lead with the offline demo before live LLM setup.
+- CI now runs `finagent doctor --no-network` and the offline demo as CLI smoke
+  checks.
 
 ## [0.1.0] — 2026-04-29
 

@@ -36,6 +36,8 @@ jobs:
       - name: CLI smoke
         run: |
           finagent version
+          finagent doctor --no-network
+          finagent demo NVDA --output-dir /tmp/openfinagent-demo --audit /tmp/openfinagent-audit.jsonl
           finagent providers || true
 
   lint:
