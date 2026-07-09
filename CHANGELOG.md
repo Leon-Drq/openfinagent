@@ -7,6 +7,8 @@ reaches v1.0.
 
 ## [Unreleased]
 
+## [0.2.0] — 2026-07-08
+
 ### Added
 
 - `finagent demo` runs a no-network, no-LLM first-run workflow using the
@@ -64,5 +66,6 @@ clone the repo, set `OPENAI_API_KEY`, run `finagent run earnings-deep-dive
 - Apache 2.0 license, GitHub Actions CI matrix on Python 3.10–3.12,
   ruff lint, four offline smoke tests.
 
-[Unreleased]: https://github.com/Leon-Drq/openfinagent/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/Leon-Drq/openfinagent/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/Leon-Drq/openfinagent/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/Leon-Drq/openfinagent/releases/tag/v0.1.0

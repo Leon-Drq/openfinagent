@@ -12,7 +12,7 @@ Compose investment research, due-diligence, and quant workflows with multi-agent
 
 [![License](https://img.shields.io/badge/license-Apache%202.0-064E3B?style=flat-square)](./LICENSE)
 [![Python](https://img.shields.io/badge/python-3.10%2B-064E3B?style=flat-square)](https://www.python.org)
-[![Status](https://img.shields.io/badge/status-v0.1%20preview-D97706?style=flat-square)](#roadmap)
+[![Status](https://img.shields.io/badge/status-v0.2%20rc-D97706?style=flat-square)](#roadmap)
 [![Built on QVeris](https://img.shields.io/badge/built%20on-QVeris-064E3B?style=flat-square)](https://qveris.ai)
 
 </div>
@@ -84,12 +84,12 @@ Every step is **traced, cached, and cost-capped**. The full audit lives in `audi
 ### 1. Install
 
 ```bash
-# Today (v0.1 preview) — clone and install in editable mode:
+# Source install, works today:
 git clone https://github.com/Leon-Drq/openfinagent.git
 cd openfinagent
 pip install -e .
 
-# Once we hit v0.2, this will also work:
+# After the v0.2 PyPI release:
 # pip install openfinagent
 ```
 
@@ -226,9 +226,9 @@ pip install -e ".[mcp]"     # adds the official `mcp` SDK as an extra
 
 Restart your client and ask it _"discover capabilities for NVDA earnings"_ — it'll route through your free / QVeris / private providers exactly the same way the CLI does.
 
-### What's not in v0.1 yet
+### What's not in v0.2 yet
 
-PyPI publishing, `finagent auth login`, `finagent skill install`, the Web UI, and the `pipx install "openfinagent[ui]"` extra are all on the [roadmap](#roadmap) but not in this release. Star the repo to get notified when they ship.
+`finagent auth login`, `finagent skill install`, the Web UI, and the `pipx install "openfinagent[ui]"` extra are all on the [roadmap](#roadmap) but not in this release. Star the repo to get notified when they ship.
 
 Release maintainers can follow [`docs/release.md`](./docs/release.md) for TestPyPI, PyPI Trusted Publishing, and wheel verification.
 
@@ -386,7 +386,7 @@ Five layers, each replaceable:
 
 ## Skills *(v0.3 preview)*
 
-> Not in v0.1 yet. Tracked here so the design is reviewable while we build it.
+> Not in v0.2 yet. Tracked here so the design is reviewable while we build it.
 
 A *Skill* is a self-contained, versioned analysis package. The proposed shape:
 
@@ -417,12 +417,11 @@ If you want to help shape the registry design, open an issue with the `skills` l
 
 ## Roadmap
 
-- [x] **v0.1 preview** — `DataProvider` protocol, 5 built-in providers (sample, yfinance, sec_edgar, fred, qveris), workflow YAML DSL, `finagent` CLI, `finagent init`, `finagent demo`, `finagent doctor`, OpenAI-compatible LLM step, audit log, cost guard, MCP server (`finagent mcp serve`).
-- [ ] **v0.2** — PyPI release, release workflow, package verification, richer examples.
-- [ ] **v0.3** — Skill registry (`finagent skill install ...`), richer provider catalog, workflow templates.
-- [ ] **v0.4** — Web UI workbench (Next.js), workflow run console, report preview, audit timeline, Langfuse tracing.
-- [ ] **v0.5** — Multi-tenant deployment, RBAC, self-hosted Docker compose.
-- [ ] **v0.6** — Skill Hub with ratings, signed packages.
+- [x] **v0.2 rc** — `DataProvider` protocol, 5 built-in providers (sample, yfinance, sec_edgar, fred, qveris), workflow YAML DSL, `finagent` CLI, `finagent init`, `finagent demo`, `finagent doctor`, OpenAI-compatible LLM step, audit log, cost guard, MCP server (`finagent mcp serve`), release workflow, package verification.
+- [ ] **v0.3** — PyPI release follow-through, richer examples, first workflow catalog.
+- [ ] **v0.4** — Skill registry (`finagent skill install ...`), richer provider catalog, workflow templates.
+- [ ] **v0.5** — Web UI workbench (Next.js), workflow run console, report preview, audit timeline, Langfuse tracing.
+- [ ] **v0.6** — Multi-tenant deployment, RBAC, self-hosted Docker compose.
 - [ ] **v1.0** — Production SLA, enterprise SSO, on-prem QVeris bridge.
 - [ ] **Beyond** — RL loop for workflow tuning, realtime streaming agents, multi-broker execution adapter.
 
@@ -462,7 +461,7 @@ Yes. The <code>DataProvider</code> protocol lets you write a custom provider tha
 <details>
 <summary><b>What LLMs are supported?</b></summary>
 <br/>
-Anything that speaks the OpenAI Chat Completions protocol works today: real OpenAI, the <a href="https://vercel.com/docs/ai-gateway">Vercel AI Gateway</a>, Azure OpenAI, Groq, Together, local Ollama / llama.cpp, etc. Set <code>OPENAI_API_KEY</code> and (optionally) <code>OPENAI_BASE_URL</code> in your <code>.env</code>; the LLM step picks them up automatically. First-class Anthropic / Bedrock / Google providers land in v0.2.
+Anything that speaks the OpenAI Chat Completions protocol works today: real OpenAI, the <a href="https://vercel.com/docs/ai-gateway">Vercel AI Gateway</a>, Azure OpenAI, Groq, Together, local Ollama / llama.cpp, etc. Set <code>OPENAI_API_KEY</code> and (optionally) <code>OPENAI_BASE_URL</code> in your <code>.env</code>; the LLM step picks them up automatically. First-class Anthropic / Bedrock / Google adapters are planned.
 </details>
 
 <details>
@@ -507,7 +506,7 @@ Read [`CONTRIBUTING.md`](./CONTRIBUTING.md) for the dev loop and code style.
 
 - All credentials (QVeris, Bloomberg, internal APIs) stay on your machine; we never proxy them.
 - Every tool call is logged with input, output, latency, and cost — exportable as JSONL for audit.
-- A **read-only posture** is the default — no capability in v0.1 touches order entry or fund movement.
+- A **read-only posture** is the default — no capability in v0.2 touches order entry or fund movement.
 - Found a vulnerability? Please follow [`SECURITY.md`](./SECURITY.md).
 
 > **Disclaimer.** OpenFinAgent is a research tool. Outputs may be wrong, incomplete, or out of date. Nothing in this software is investment, legal, or tax advice. You are responsible for any decisions made using it.
