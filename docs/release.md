@@ -16,6 +16,27 @@ Trusted Publishing for this repository:
 The GitHub workflow uses OIDC (`id-token: write`) and publishes only from the
 named environments.
 
+Use these exact claims when configuring the TestPyPI publisher:
+
+```text
+Repository owner: Leon-Drq
+Repository name: openfinagent
+Workflow filename: publish.yml
+Environment name: testpypi
+```
+
+Use these exact claims when configuring the PyPI publisher:
+
+```text
+Repository owner: Leon-Drq
+Repository name: openfinagent
+Workflow filename: publish.yml
+Environment name: pypi
+```
+
+If the workflow fails with `invalid-publisher`, the matching Trusted Publisher
+or Pending Publisher has not been configured on PyPI/TestPyPI yet.
+
 ## Local Preflight
 
 Use Python 3.12 for release checks:
